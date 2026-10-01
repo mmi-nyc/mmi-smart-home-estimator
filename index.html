@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MMI Smart Home Estimator</title>
+  <meta name="description" content="Good / Better / Best smart home project estimator by MMI Integration." />
+  <style>
+    :root{
+      --bg:#0b0d10;
+      --panel:#12161b;
+      --panel2:#171c22;
+      --text:#f5f7fa;
+      --muted:#98a2ad;
+      --line:#252c35;
+      --accent:#ffffff;
+      --radius:18px;
+      --shadow:0 18px 50px rgba(0,0,0,.28);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 20% 0%, rgba(255,255,255,.07), transparent 34%),
+        var(--bg);
+    }
+    .wrap{max-width:1180px;margin:0 auto;padding:28px 20px 72px}
+    header{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-bottom:28px}
+    .brand{font-weight:800;letter-spacing:.08em;font-size:14px}
+    .tag{color:var(--muted);font-size:14px}
+    .hero{
+      background:linear-gradient(145deg,#14191f,#0f1318);
+      border:1px solid var(--line);
+      border-radius:28px;
+      padding:42px;
+      box-shadow:var(--shadow);
+      margin-bottom:28px;
+    }
+    h1{font-size:clamp(38px,6vw,74px);line-height:.95;margin:0 0 18px;letter-spacing:-.05em}
+    .hero p{max-width:760px;color:#c3cad2;font-size:18px;line-height:1.6;margin:0}
+    .store-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px}
+    .store{
+      border:1px solid var(--line);
+      background:#0d1116;
+      border-radius:16px;
+      padding:16px;
+    }
+    .store strong{display:block;margin-bottom:4px}
+    .store span{color:var(--muted);font-size:13px}
+    .grid{display:grid;grid-template-columns:1.5fr .85fr;gap:24px}
+    .card{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:24px;
+      box-shadow:var(--shadow);
+    }
+    h2{font-size:20px;margin:0 0 18px}
+    .tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:22px}
+    .tier{
+      cursor:pointer;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:16px;
+      background:var(--panel2);
+      color:var(--text);
+      text-align:left;
+      transition:.15s ease;
+    }
+    .tier:hover{transform:translateY(-1px)}
+    .tier.active{outline:2px solid white;background:#1d232b}
+    .tier small{display:block;color:var(--muted);margin-top:5px}
+    .section{border-top:1px solid var(--line);padding-top:20px;margin-top:20px}
+    .row{
+      display:grid;
+      grid-template-columns:1fr 110px 130px;
+      gap:12px;
+      align-items:center;
+      padding:12px 0;
+      border-bottom:1px solid rgba(255,255,255,.05);
+    }
+    .row:last-child{border-bottom:0}
+    .row-title{font-weight:650}
+    .row-meta{font-size:12px;color:var(--muted);margin-top:4px}
+    select,input[type=number]{
+      width:100%;
+      background:#0b0f13;
+      color:var(--text);
+      border:1px solid var(--line);
+      border-radius:10px;
+      padding:10px 11px;
+      font:inherit;
+    }
+    .toggle{
+      display:flex;justify-content:space-between;gap:16px;align-items:center;
+      padding:14px 0;border-bottom:1px solid rgba(255,255,255,.05)
+    }
+    .toggle:last-child{border-bottom:0}
+    .toggle label{font-weight:600}
+    .toggle small{display:block;color:var(--muted);margin-top:4px;font-weight:400}
+    input[type=checkbox]{width:20px;height:20px;accent-color:white}
+    .summary{position:sticky;top:20px}
+    .price{font-size:48px;font-weight:800;letter-spacing:-.04em;margin:10px 0 4px}
+    .muted{color:var(--muted)}
+    .lineitem{display:flex;justify-content:space-between;gap:15px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+    .lineitem:last-child{border-bottom:0}
+    .total{display:flex;justify-content:space-between;align-items:end;border-top:1px solid var(--line);padding-top:18px;margin-top:18px}
+    .btn{
+      display:block;width:100%;padding:14px 16px;border-radius:12px;border:0;
+      background:white;color:black;font-weight:750;font-size:15px;cursor:pointer;margin-top:18px
+    }
+    .fine{font-size:12px;color:var(--muted);line-height:1.5;margin-top:14px}
+    .pill{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:6px 10px;color:#cbd2da;font-size:12px;margin-top:12px}
+    @media(max-width:850px){
+      .grid{grid-template-columns:1fr}
+      .summary{position:static}
+      .store-row,.tiers{grid-template-columns:1fr}
+      .row{grid-template-columns:1fr 90px 110px}
+      .hero{padding:28px}
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">MMI INTEGRATION</div>
+    <div class="tag">Smart home project calculator</div>
+  </header>
+
+  <section class="hero">
+    <h1>Good. Better. Best.</h1>
+    <p>
+      Build a same-day smart home package around the stores you already use.
+      Choose a tier, set the device count, and get an instant project estimate.
+    </p>
+    <div class="store-row">
+      <div class="store"><strong>Good</strong><span>Practical devices. Strong value. Straightforward deployment.</span></div>
+      <div class="store"><strong>Better</strong><span>Stronger ecosystem options and more polished integration.</span></div>
+      <div class="store"><strong>Best</strong><span>Premium hardware, deeper integration, and more flexibility.</span></div>
+    </div>
+  </section>
+
+  <div class="grid">
+    <main class="card">
+      <h2>1. Choose a package</h2>
+      <div class="tiers">
+        <button class="tier active" data-tier="good"><strong>Good</strong><small>Essential package</small></button>
+        <button class="tier" data-tier="better"><strong>Better</strong><small>Connected package</small></button>
+        <button class="tier" data-tier="best"><strong>Best</strong><small>Integrated package</small></button>
+      </div>
+
+      <div class="section">
+        <h2>2. Hardware</h2>
+        <div class="row">
+          <div>
+            <div class="row-title">Cameras</div>
+            <div class="row-meta" id="cameraDesc"></div>
+          </div>
+          <input id="cameraQty" type="number" min="0" max="24" value="2">
+          <div id="cameraPrice"></div>
+        </div>
+        <div class="row">
+          <div>
+            <div class="row-title">Video doorbell / chime</div>
+            <div class="row-meta" id="chimeDesc"></div>
+          </div>
+          <input id="chimeQty" type="number" min="0" max="12" value="1">
+          <div id="chimePrice"></div>
+        </div>
+        <div class="row">
+          <div>
+            <div class="row-title">Control panel / display</div>
+            <div class="row-meta" id="panelDesc"></div>
+          </div>
+          <input id="panelQty" type="number" min="0" max="12" value="1">
+          <div id="panelPrice"></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>3. Technology integration</h2>
+        <div class="toggle">
+          <label>iPhone / iPad setup<small>App install, account linking, notifications, sharing.</small></label>
+          <input id="apple" type="checkbox" checked>
+        </div>
+        <div class="toggle">
+          <label>Android setup<small>Phone/tablet app, alerts, access and permissions.</small></label>
+          <input id="android" type="checkbox">
+        </div>
+        <div class="toggle">
+          <label>Smart display / tablet dashboard<small>Wall tablet, kitchen display, or dedicated control surface.</small></label>
+          <input id="tablet" type="checkbox">
+        </div>
+        <div class="toggle">
+          <label>Network / Wi‑Fi check<small>Coverage, connectivity and device placement review.</small></label>
+          <input id="wifi" type="checkbox" checked>
+        </div>
+      </div>
+
+    </main>
+
+    <aside class="card summary">
+      <h2>Your project</h2>
+      <div class="pill" id="tierPill">GOOD · HOME DEPOT</div>
+      <div class="price" id="grandTotal">$0</div>
+      <div class="muted">Estimated project total</div>
+
+      <div class="section" id="lineItems"></div>
+
+      <div class="total">
+        <div>
+          <div class="muted">Materials</div>
+          <strong id="materialsTotal">$0</strong>
+        </div>
+        <div style="text-align:right">
+          <div class="muted">Labor + integration</div>
+          <strong id="servicesTotal">$0</strong>
+        </div>
+      </div>
+
+      <button class="btn" onclick="window.print()">Print / Save estimate</button>
+      <div class="fine">
+        Prototype sell pricing is currently modeled from observed mainstream retail pricing
+        plus a $100 hardware baseline. Retail prices and availability change; verify before quoting.
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script>
+const catalog = {
+  good: {
+    package: "Good",
+    camera: {
+      name: "Ring Outdoor Cam / Stick Up Cam class",
+      retail: 79.99,
+      price: 179.99
+    },
+    chime: {
+      name: "Ring Video Doorbell class",
+      retail: 99.99,
+      price: 199.99
+    },
+    panel: {
+      name: "Echo Show 5 class smart display",
+      retail: 99.99,
+      price: 199.99
+    },
+    integration: 75
+  },
+  better: {
+    package: "Better",
+    camera: {
+      name: "Google Nest Cam Indoor 2K class",
+      retail: 129.99,
+      price: 229.99
+    },
+    chime: {
+      name: "Google Nest Doorbell wired class",
+      retail: 188.00,
+      price: 288.00
+    },
+    panel: {
+      name: "Echo Show 8 class smart display",
+      retail: 199.99,
+      price: 299.99
+    },
+    integration: 125
+  },
+  best: {
+    package: "Best",
+    camera: {
+      name: "Google Nest Cam Outdoor 2K / premium outdoor class",
+      retail: 199.99,
+      price: 299.99
+    },
+    chime: {
+      name: "Google Nest Doorbell 3rd Gen 2K class",
+      retail: 199.99,
+      price: 299.99
+    },
+    panel: {
+      name: "Echo Show 15 class smart home display",
+      retail: 349.99,
+      price: 449.99
+    },
+    integration: 175
+  }
+};
+
+let tier = "good";
+const $ = id => document.getElementById(id);
+const money = n => n.toLocaleString("en-US",{style:"currency",currency:"USD",minimumFractionDigits:0,maximumFractionDigits:2});
+
+function qty(id){ return Math.max(0, parseInt($(id).value || 0,10)); }
+
+function render(){
+  const c = catalog[tier];
+
+  $("cameraDesc").textContent = c.camera.name;
+  $("chimeDesc").textContent = c.chime.name;
+  $("panelDesc").textContent = c.panel.name;
+
+  $("cameraPrice").textContent = money(c.camera.price) + " ea";
+  $("chimePrice").textContent = money(c.chime.price) + " ea";
+  $("panelPrice").textContent = money(c.panel.price) + " ea";
+
+  const cq = qty("cameraQty"), dq = qty("chimeQty"), pq = qty("panelQty");
+  const materials = cq*c.camera.price + dq*c.chime.price + pq*c.panel.price;
+  const deviceCount = cq+dq+pq;
+  const labor = deviceCount * 250;
+
+  let integration = 0;
+  if($("apple").checked) integration += c.integration;
+  if($("android").checked) integration += c.integration;
+  if($("tablet").checked) integration += c.integration + 50;
+  if($("wifi").checked) integration += 95;
+
+  const services = labor + integration;
+  const grand = materials + services;
+
+  $("tierPill").textContent = c.package.toUpperCase();
+  $("materialsTotal").textContent = money(materials);
+  $("servicesTotal").textContent = money(services);
+  $("grandTotal").textContent = money(grand);
+
+  const items = [];
+  if(cq) items.push(["Cameras × "+cq, money(cq*c.camera.price)]);
+  if(dq) items.push(["Doorbell/chime × "+dq, money(dq*c.chime.price)]);
+  if(pq) items.push(["Panels/displays × "+pq, money(pq*c.panel.price)]);
+  if(deviceCount) items.push(["Installation × "+deviceCount+" @ $250", money(labor)]);
+  if($("apple").checked) items.push(["Apple integration", money(c.integration)]);
+  if($("android").checked) items.push(["Android integration", money(c.integration)]);
+  if($("tablet").checked) items.push(["Tablet/dashboard", money(c.integration+50)]);
+  if($("wifi").checked) items.push(["Wi‑Fi/network check", money(95)]);
+
+  $("lineItems").innerHTML = items.map(i => `<div class="lineitem"><span>${i[0]}</span><strong>${i[1]}</strong></div>`).join("");
+}
+
+document.querySelectorAll(".tier").forEach(btn => {
+  btn.addEventListener("click", () => {
+    tier = btn.dataset.tier;
+    document.querySelectorAll(".tier").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    render();
+  });
+});
+
+document.querySelectorAll("input").forEach(el => el.addEventListener("input", render));
+render();
+</script>
+</body>
+</html>
