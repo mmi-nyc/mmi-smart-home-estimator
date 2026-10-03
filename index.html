@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>MMI Smart Home Estimator</title>
   <meta name="description" content="Good / Better / Best smart home project estimator by MMI Integration." />
+  <link rel="preload" as="image" href="assets/good-home.webp" type="image/webp">
+  <link rel="preload" as="image" href="assets/better-home.webp" type="image/webp">
+  <link rel="preload" as="image" href="assets/best-apartments.webp" type="image/webp">
   <style>
     :root{
       --bg:#0b0d10;
@@ -45,10 +48,32 @@
       border:1px solid var(--line);
       background:#0d1116;
       border-radius:16px;
-      padding:16px;
+      padding:0;
+      overflow:hidden;
+      display:block;
     }
-    .store strong{display:block;margin-bottom:4px}
-    .store span{color:var(--muted);font-size:13px}
+    .store-card{
+      appearance:none;
+      -webkit-appearance:none;
+      width:100%;
+      color:var(--text);
+      text-align:left;
+      cursor:pointer;
+      transition:.15s ease;
+      box-shadow:none;
+    }
+    .store-card:hover{transform:translateY(-1px)}
+    .store-card.active{outline:2px solid white;background:#1d232b}
+    .store-image{
+      width:100%;
+      aspect-ratio:4/3;
+      background-size:cover;
+      background-position:center;
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .store-copy{padding:14px 16px 16px}
+    .store strong{display:block;margin-bottom:6px;font-size:16px}
+    .store span{color:var(--muted);font-size:13px;line-height:1.45}
     .grid{display:grid;grid-template-columns:1.5fr .85fr;gap:24px}
     .card{
       background:var(--panel);
@@ -132,13 +157,31 @@
   <section class="hero">
     <h1>Good. Better. Best.</h1>
     <p>
-      Build a same-day smart home package around the stores you already use.
-      Choose a tier, set the device count, and get an instant project estimate.
+      Price the technology package.
+      Choose a package. Enter quantities. Get a budget number for equipment and installation.
     </p>
     <div class="store-row">
-      <div class="store"><strong>Good</strong><span>Practical devices. Strong value. Straightforward deployment.</span></div>
-      <div class="store"><strong>Better</strong><span>Stronger ecosystem options and more polished integration.</span></div>
-      <div class="store"><strong>Best</strong><span>Premium hardware, deeper integration, and more flexibility.</span></div>
+      <button class="store store-card active" type="button" data-tier="good">
+        <div class="store-image" style="background-image:url('assets/good-home.webp')"></div>
+        <div class="store-copy">
+          <strong>Good</strong>
+          <span>Queens 3-family home · driveway · 3 floors + finished attic. Good for home-scale work.</span>
+        </div>
+      </button>
+      <button class="store store-card" type="button" data-tier="better">
+        <div class="store-image" style="background-image:url('assets/better-home.webp')"></div>
+        <div class="store-copy">
+          <strong>Better</strong>
+          <span>Long Island single-family home · more land · driveway · gardens. Better for larger residential scope.</span>
+        </div>
+      </button>
+      <button class="store store-card" type="button" data-tier="best">
+        <div class="store-image" style="background-image:url('assets/best-apartments.webp')"></div>
+        <div class="store-copy">
+          <strong>Best</strong>
+          <span>Brooklyn / Queens apartment buildings · 6 to 101 units. Best for multifamily and mixed residential scale.</span>
+        </div>
+      </button>
     </div>
   </section>
 
@@ -146,9 +189,9 @@
     <main class="card">
       <h2>1. Choose a package</h2>
       <div class="tiers">
-        <button class="tier active" data-tier="good"><strong>Good</strong><small>Essential package</small></button>
-        <button class="tier" data-tier="better"><strong>Better</strong><small>Connected package</small></button>
-        <button class="tier" data-tier="best"><strong>Best</strong><small>Integrated package</small></button>
+        <button class="tier active" data-tier="good"><strong>Good</strong><small>Queens 3-family home</small></button>
+        <button class="tier" data-tier="better"><strong>Better</strong><small>Long Island home</small></button>
+        <button class="tier" data-tier="best"><strong>Best</strong><small>Apartment building</small></button>
       </div>
 
       <div class="section">
@@ -202,10 +245,10 @@
     </main>
 
     <aside class="card summary">
-      <h2>Your project</h2>
-      <div class="pill" id="tierPill">GOOD · HOME DEPOT</div>
+      <h2>Budget</h2>
+      <div class="pill" id="tierPill">GOOD</div>
       <div class="price" id="grandTotal">$0</div>
-      <div class="muted">Estimated project total</div>
+      <div class="muted">Estimated technology budget</div>
 
       <div class="section" id="lineItems"></div>
 
@@ -339,17 +382,23 @@ function render(){
   $("lineItems").innerHTML = items.map(i => `<div class="lineitem"><span>${i[0]}</span><strong>${i[1]}</strong></div>`).join("");
 }
 
+function setTier(nextTier){
+  tier = nextTier;
+  document.querySelectorAll(".tier").forEach(b => b.classList.toggle("active", b.dataset.tier === tier));
+  document.querySelectorAll(".store-card").forEach(b => b.classList.toggle("active", b.dataset.tier === tier));
+  render();
+}
+
 document.querySelectorAll(".tier").forEach(btn => {
-  btn.addEventListener("click", () => {
-    tier = btn.dataset.tier;
-    document.querySelectorAll(".tier").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    render();
-  });
+  btn.addEventListener("click", () => setTier(btn.dataset.tier));
+});
+
+document.querySelectorAll(".store-card").forEach(btn => {
+  btn.addEventListener("click", () => setTier(btn.dataset.tier));
 });
 
 document.querySelectorAll("input").forEach(el => el.addEventListener("input", render));
-render();
+setTier("good");
 </script>
 </body>
 </html>
